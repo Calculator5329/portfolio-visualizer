@@ -1,6 +1,9 @@
+import datetime
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import yfinance as yf
+import datetime as dt
 
 
 # Functions
@@ -71,13 +74,6 @@ def average(arr):
 
 
 def getUserInput():
-    userStartYear = validate_int_input("Enter the year you would like the backtest to begin: ",
-                                       "Error, please enter a valid year: ")
-    # userStartYear = 2015
-
-    start_date = str(userStartYear) + "-1-1"
-    end_date = "2023-1-28"
-
     # Dictionary for the portfolio
     tickers_weights = {}
     ticker_weights_sum = sum(list(tickers_weights.values()))
@@ -173,7 +169,7 @@ class Portfolio:
                 self.shares[ticker].append(self.shares[ticker][-1])
 
                 # Contribution frequency, set to one month by default
-                contribute_freq = 300000
+                contribute_freq = 30
 
                 # Rebalance frequency, set to one month by default
                 rebalance_freq = 30
@@ -211,6 +207,12 @@ class Portfolio:
     def get_prices(self):
         return self.prices
 
+    def get_start_date(self):
+        return self.start_date
+
+    def get_end_date(self):
+        return self.end_date
+
     def set_start_date(self, start_date_):
         self.start_date = start_date_
 
@@ -218,24 +220,62 @@ class Portfolio:
         self.end_date = end_date_
 
 
+debug_mode = True
+
 # Get user input
-tickers_weights = getUserInput()
+if debug_mode:
+    tickers_weights = {"MSFT": 50, "AMZN": 50}
+else:
+    tickers_weights = getUserInput()
 
 # Setting up the comparison portfolio
 comparison = Portfolio(tickers_weights)
 
+userStartYear = validate_int_input("Enter the year you would like the backtest to begin: ",
+                                   "Error, please enter a valid year: ")
+# userStartYear = 2015
+start_date = str(userStartYear) + "-1-1"
+end_date = "2023-1-1"
+
+comparison.set_start_date(start_date)
+comparison.set_end_date(end_date)
+
 comparison.initialize_tickers()
 
-comparison.calculate_portfolio(initial_investment=1000, addition=500)
+user_initial = validate_int_input("Enter your initial investment: $")
+user_addition = validate_int_input("Enter your monthly addition to the portfolio: $")
 
-print(f"Starting portfolio value: {comparison.get_portfolio()[0]}")
-print(f"Ending portfolio value: {comparison.get_portfolio()[-1]}")
+total_invested = user_initial + user_addition * 12 * (2023 - userStartYear)
+print(total_invested)
 
+comparison.calculate_portfolio(initial_investment=user_initial, addition=user_addition)
+
+# This data is only to set the dates, so I just used a random old company
+data = yf.download("F", comparison.get_start_date(), comparison.get_end_date())
+data["Portfolio_Value"] = comparison.get_portfolio()
+
+portfolio_start_value = "$" + "{:,.2f}".format(comparison.get_portfolio()[0])
+
+portfolio_end_value = "$" + "{:,.2f}".format(comparison.get_portfolio()[-1])
+
+percent_gain = comparison.get_portfolio()[-1]  / total_invested
+years_per_dollar = (2023 - userStartYear) * (user_initial / total_invested) + \
+                  (2023 - userStartYear)/2 * ((total_invested - user_initial) / total_invested)
+print(years_per_dollar)
+time_return = percent_gain**(1/years_per_dollar)
+print(time_return)
+
+print(f"Starting portfolio value: " + portfolio_start_value)
+print(f"Ending portfolio value: " + portfolio_end_value)
 
 # Display as a chart
-df = pd.DataFrame(comparison.get_portfolio())
+df = pd.DataFrame(data)
 
-df.plot()
+fig, ax = plt.subplots()
+
+ax.plot(df["Portfolio_Value"])
+
+ax.yaxis.set_major_formatter('${x:,.2f}')
 
 plt.show()
 
