@@ -101,7 +101,7 @@ def getUserInput():
     ticker_input = validate_str_input("Enter a ticker to add to your portfolio (press enter to exit): ")
 
     while ticker_input not in ["", " ", "  ", "   ", "exit"] and ticker_weights_sum != 100:
-        print(ticker_weights_sum)
+        # print(ticker_weights_sum)
         weight_input = validate_int_input("Enter a weight (1-100): ")
 
         while weight_input > 100 or weight_input < 1:
@@ -210,7 +210,7 @@ class Portfolio:
                     else:
                         stock_changes[index].append(None)
                 
-            my_debug("len(stock)", stock_len)
+            # my_debug("len(stock)", stock_len)
             
         # my_debug("stock_changes",stock_changes)
 
@@ -222,7 +222,7 @@ class Portfolio:
                 if changes_list[i]:
                     weights_list[i].append(weights[index])
         
-        my_debug('wl', weights_list)
+        # my_debug('wl', weights_list)
         
         # Initialize price list with 100 as first value
         price_list = [100]
@@ -313,11 +313,11 @@ class Portfolio:
         self.end_date = end_date_
 
 
-debug_mode = True
+debug_mode = False
 
 # Get user input
 if debug_mode:
-    tickers_weights = {"ttcf": 20, "tsla" :20, "CRSR": 20, "PINS" : 20, "CRCT" : 20}
+    tickers_weights = {"META" : 22, "CRSR" : 16, "PINS" : 13, "DBX" : 14, "CRCT" : 10, "AMZN" : 9, "SNBR" : 7, "BABA" : 5, "PYPL" : 4}
 else:
     tickers_weights = getUserInput()
 
@@ -342,7 +342,6 @@ user_initial = validate_int_input("Enter your initial investment: $")
 user_addition = validate_int_input("Enter your monthly addition to the portfolio: $")
 
 total_invested = user_initial + user_addition * 12 * (2023 - userStartYear)
-print(total_invested)
 
 comparison.calculate_portfolio(initial_investment=user_initial, addition=user_addition)
 
@@ -359,12 +358,14 @@ portfolio_end_value = "$" + "{:,.2f}".format(comparison.get_portfolio()[-1])
 percent_gain = comparison.get_portfolio()[-1]  / total_invested
 years_per_dollar = (2023 - userStartYear) * (user_initial / total_invested) + \
                   (2023 - userStartYear)/2 * ((total_invested - user_initial) / total_invested)
-print(years_per_dollar)
+# print(years_per_dollar)
 time_return = percent_gain**(1/years_per_dollar)
-print(time_return)
-
+total_invested = "$" + "{:,.2f}".format(user_initial + user_addition * 12 * (2023 - userStartYear))
+print("\n\n\n\n\n")
+print(f"Total Contributions: {total_invested}\n")
+print(f"TWRR: {str(round_decimal((time_return - 1) * 100))}%\n")
 print(f"Starting portfolio value: " + portfolio_start_value)
-print(f"Ending portfolio value: " + portfolio_end_value)
+print(f"Ending portfolio value: " + portfolio_end_value + "\n")
 
 # Display as a chart
 df = pd.DataFrame(data)
@@ -374,6 +375,8 @@ fig, ax = plt.subplots()
 ax.plot(df["Portfolio_Value"])
 
 ax.yaxis.set_major_formatter('${x:,.2f}')
+
+fig.set_size_inches(16, 8)
 
 plt.show()
 
