@@ -1,8 +1,31 @@
-# Portfolio Visualizer
-This is a stock portfolio visualizer program I made using stock data from yfinance.
+# Overview
+This Python application is designed for backtesting investment strategies using real stock market data. It allows users to create a portfolio of stocks, specify investment amounts, and simulate the portfolio's performance over time. The application is built with Python and utilizes libraries like Pandas, Matplotlib, and Yahoo Finance (yfinance) for data processing and visualization.
 
-It takes your portfolio of stocks and their respective weights as input, gathers data from yfinance, converts the data into a pandas dataframe,
-and shows simulated past performance using matplotlib.
+# Features
+Portfolio Simulation: Users can simulate the performance of a custom stock portfolio over a specified time period.
+
+Data Visualization: The application generates a plot showing the portfolio value over time, providing a visual representation of investment performance.
+
+User Input Validation: It includes robust input validation functions to ensure correct and meaningful user inputs.
+
+Dynamic Data Retrieval: Retrieves and processes stock price data dynamically from Yahoo Finance.
+
+# How to Use
+Create Your Portfolio: Enter the ticker symbols of the stocks you want to include in your portfolio along with their respective weights.
+
+Specify Investment Details: Input the starting year for the backtest, your initial investment, and monthly contributions.
+
+Analyze the Performance: Observe the plotted chart showing the growth of your portfolio over the specified period.
+
+# Requirements
+Python 3.x
+
+Libraries: Pandas, Matplotlib, yfinance
+
+Internet connection for retrieving stock data from Yahoo Finance.
+
+# Installation and Execution
+To run the application, ensure Python 3.x is installed along with the required libraries. Clone or download the repository, navigate to the project directory, and execute the main script.
 
 # Example Portfolio
 
