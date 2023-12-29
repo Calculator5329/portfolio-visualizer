@@ -6,7 +6,7 @@ and shows simulated past performance using matplotlib.
 
 # Example Portfolio
 
-Inputs
+__Inputs:__
 
 50% Amazon, 50% Google
 
@@ -14,7 +14,7 @@ $1000 Initial investment, $100 Monthly contribution
 
 2015-2023
 
-Results
+__Results:__
 
 ![Screenshot_48](https://github.com/Calculator5329/portfolio-visualizer/assets/62777822/7df0a611-f244-4684-810c-82ad7908ee2d)
 
